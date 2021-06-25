@@ -21,14 +21,14 @@ except IOError:
 
 setup(
     name=module_name,
-    version="0.14.0",
+    version="1.0.0-dev",
     url="https://github.com/DomainDrivenArchitecture/python-terraform",
     license="MIT",
     author="Freddy Tan",
     author_email="beelit94@gmail.com",
     description=short_description,
     long_description=long_description,
-    packages=["dda_python_terraform"],
+    packages=["python_terraform"],
     package_data={},
     platforms="any",
     install_requires=dependencies,
