@@ -29,6 +29,12 @@ STRING_CASES = [
         ),
         "terraform push -vcs=true -token=token -atlas-address=url path",
     ],
+    [
+        lambda x: x.generate_cmd_string(
+            "refresh", "path", token="token"
+        ),
+        "terraform refresh -token=token path",
+    ],
 ]
 
 CMD_CASES = [
