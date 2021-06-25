@@ -11,6 +11,7 @@ env/
 Icon
 /pytestdebug.log
 .DS_Store
+dist/*
 
 # virtualenv
 .virtualenv/
