@@ -29,10 +29,40 @@ pylint:
   - pylint -d C0301 python_terraform/*.py
 
 
-pytest:
+test-0.13.4:
   stage: test
   script:
   - export TFVER=0.13.4
+  - export TFURL=https://releases.hashicorp.com/terraform/
+  - TFURL+=$TFVER
+  - TFURL+="/terraform_"
+  - TFURL+=$TFVER
+  - TFURL+="_linux_amd64.zip"
+  - wget $TFURL -O terraform_bin.zip
+  - mkdir tf_bin
+  - unzip terraform_bin.zip -d tf_bin
+  - PATH=$PATH:$PWD/tf_bin 
+  - pytest -v
+
+test-0.13.7:
+  stage: test
+  script:
+  - export TFVER=0.13.7
+  - export TFURL=https://releases.hashicorp.com/terraform/
+  - TFURL+=$TFVER
+  - TFURL+="/terraform_"
+  - TFURL+=$TFVER
+  - TFURL+="_linux_amd64.zip"
+  - wget $TFURL -O terraform_bin.zip
+  - mkdir tf_bin
+  - unzip terraform_bin.zip -d tf_bin
+  - PATH=$PATH:$PWD/tf_bin 
+  - pytest -v
+
+test-1.0.8:
+  stage: test
+  script:
+  - export TFVER=1.0.8
   - export TFURL=https://releases.hashicorp.com/terraform/
   - TFURL+=$TFVER
   - TFURL+="/terraform_"
