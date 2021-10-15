@@ -6,12 +6,28 @@ before_script:
   - pip install -r dev_requirements.txt
   
 stages:
+  - lint
   - test
 
 flake8:
-  stage: test
+  stage: lint
+  allow_failure: true
   script:
   - flake8 --max-line-length=120 python_terraform/*.py
+
+mypy:
+  stage: lint
+  allow_failure: true
+  script:
+  - python -m mypy python_terraform/terraform.py
+  - python -m mypy python_terraform/tfstate.py
+
+pylint:
+  stage: lint
+  allow_failure: true
+  script:
+  - pylint -d C0301 python_terraform/*.py
+
 
 pytest:
   stage: test
