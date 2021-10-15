@@ -3,11 +3,26 @@ image: "python:3.7"
 before_script:
   - python --version
   - pip install -r requirements.txt
+  - export TFVER=0.13.4
+  - export TFURL=https://releases.hashicorp.com/terraform/
+  - TFURL+=$TFVER
+  - TFURL+="/terraform_"
+  - TFURL+=$TFVER
+  - TFURL+="_linux_amd64.zip"
+  - wget $TFURL -O terraform_bin.zip
+  - mkdir tf_bin
+  - unzip terraform_bin.zip -d tf_bin
 
 stages:
-  - Static Analysis
+  - test
 
 flake8:
-  stage: Static Analysis
+  stage: test
   script:
-  - flake8 --max-line-length=120 bild/*.py
+  - flake8 --max-line-length=120 python_terraform/*.py
+
+
+pytest:
+  stage: test
+  script:
+  - PATH=$PATH:$PWD/tf_bin pytest -v
