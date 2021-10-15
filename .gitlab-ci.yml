@@ -2,7 +2,7 @@ image: "python:3.8"
 
 before_script:
   - python --version
-  - pip install -r requirements.txt
+  - pip install .
   - pip install -r dev_requirements.txt
   
 stages:
@@ -25,4 +25,5 @@ pytest:
   - wget $TFURL -O terraform_bin.zip
   - mkdir tf_bin
   - unzip terraform_bin.zip -d tf_bin
-  - PATH=$PATH:$PWD/tf_bin pytest -v
+  - PATH=$PATH:$PWD/tf_bin 
+  - pytest -v
