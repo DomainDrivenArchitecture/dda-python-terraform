@@ -1,8 +1,21 @@
-image: "python:3.7"
+image: "python:3.8"
 
 before_script:
   - python --version
   - pip install -r requirements.txt
+  - pip install -r dev_requirements.txt
+  
+stages:
+  - test
+
+flake8:
+  stage: test
+  script:
+  - flake8 --max-line-length=120 python_terraform/*.py
+
+pytest:
+  stage: test
+  script:
   - export TFVER=0.13.4
   - export TFURL=https://releases.hashicorp.com/terraform/
   - TFURL+=$TFVER
@@ -12,17 +25,4 @@ before_script:
   - wget $TFURL -O terraform_bin.zip
   - mkdir tf_bin
   - unzip terraform_bin.zip -d tf_bin
-
-stages:
-  - test
-
-flake8:
-  stage: test
-  script:
-  - flake8 --max-line-length=120 python_terraform/*.py
-
-
-pytest:
-  stage: test
-  script:
   - PATH=$PATH:$PWD/tf_bin pytest -v
