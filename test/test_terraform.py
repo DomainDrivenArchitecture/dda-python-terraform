@@ -37,7 +37,7 @@ STRING_CASES = [
     ],
 ]
 
-CMD_CASES = [
+CMD_CASES_0_x = [
     [
         "method",
         "expected_output",
@@ -49,6 +49,7 @@ CMD_CASES = [
     [
         [
             lambda x: x.cmd(
+                {},
                 "plan",
                 "var_to_output",
                 no_color=IsFlagged,
@@ -65,6 +66,7 @@ CMD_CASES = [
         # try import aws instance
         [
             lambda x: x.cmd(
+                {},
                 "import",
                 "aws_instance.foo",
                 "i-abcd1234",
@@ -80,6 +82,7 @@ CMD_CASES = [
         # test with space and special character in file path
         [
             lambda x: x.cmd(
+                {},
                 "plan",
                 "var_to_output",
                 out=FILE_PATH_WITH_SPACE_AND_SPACIAL_CHARS,
@@ -94,7 +97,79 @@ CMD_CASES = [
         # test workspace command (commands with subcommand)
         [
             lambda x: x.cmd(
-                "workspace", "show", no_color=IsFlagged, raise_on_error=False
+                {}, "workspace", "show", no_color=IsFlagged, raise_on_error=False
+            ),
+            "",
+            0,
+            False,
+            "Command: terraform workspace show -no-color",
+            "",
+        ],
+    ],
+]
+
+
+CMD_CASES_1_x = [
+    [
+        "method",
+        "expected_output",
+        "expected_ret_code",
+        "expected_exception",
+        "expected_logs",
+        "folder",
+    ],
+    [
+        [
+            lambda x: x.cmd(
+                {"chdir": "var_to_output"},
+                "plan",
+                "",
+                no_color=IsFlagged,
+                var={"test_var": "test"},
+                raise_on_error=False,
+            ),
+            # Expected output varies by terraform version
+            "Plan: 0 to add, 0 to change, 0 to destroy.",
+            0,
+            False,
+            "",
+            "var_to_output",
+        ],
+        # try import aws instance
+        [
+            lambda x: x.cmd(
+                {},
+                "import",
+                "aws_instance.foo",
+                "i-abcd1234",
+                no_color=IsFlagged,
+                raise_on_error=False,
+            ),
+            "",
+            1,
+            False,
+            "Error: No Terraform configuration files",
+            "",
+        ],
+        # test with space and special character in file path
+        [
+            lambda x: x.cmd(
+                {"chdir": "var_to_output"},
+                "plan",
+                "",
+                out=FILE_PATH_WITH_SPACE_AND_SPACIAL_CHARS,
+                raise_on_error=False,
+            ),
+            "",
+            0,
+            False,
+            "",
+            "var_to_output",
+        ],
+        # test workspace command (commands with subcommand)
+        [
+            lambda x: x.cmd(
+                {}, "workspace", "show", no_color=IsFlagged, raise_on_error=False
             ),
             "",
             0,
@@ -184,7 +259,7 @@ class TestTerraform:
         for s in strs:
             assert s in result
 
-    @pytest.mark.parametrize(*CMD_CASES)
+    @pytest.mark.parametrize(*(CMD_CASES_0_x if (os.environ.get("TFVER") and os.environ.get("TFVER").startsWith("0")) else CMD_CASES_1_x))
     def test_cmd(
         self,
         method: Callable[..., str],
@@ -194,7 +269,7 @@ class TestTerraform:
         expected_logs: str,
         caplog: LogCaptureFixture,
         folder: str,
-    ):
+    ):    
         with caplog.at_level(logging.INFO):
             tf = Terraform(working_dir=current_path)
             tf.init(folder)
@@ -209,6 +284,7 @@ class TestTerraform:
         assert expected_output in out
         assert expected_ret_code == ret
         assert expected_logs in caplog.text
+
 
     @pytest.mark.parametrize(
         ("folder", "variables", "var_files", "expected_output", "options"),
