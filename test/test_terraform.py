@@ -259,7 +259,7 @@ class TestTerraform:
         for s in strs:
             assert s in result
 
-    @pytest.mark.parametrize(*(CMD_CASES_0_x if (os.environ.get("TFVER") and os.environ.get("TFVER").startsWith("0")) else CMD_CASES_1_x))
+    @pytest.mark.parametrize(*(CMD_CASES_0_x if (os.environ.get("TFVER") and os.environ.get("TFVER").startswith("0")) else CMD_CASES_1_x))
     def test_cmd(
         self,
         method: Callable[..., str],
