@@ -17,7 +17,7 @@ root_logger = logging.getLogger()
 
 current_path = os.path.dirname(os.path.realpath(__file__))
 
-version = 0.13 if (os.environ.get("TFVER") and os.environ.get("TFVER").startswith("0")) else 1.0
+version = 1.0 if (os.environ.get("TFVER") and os.environ.get("TFVER").startswith("1")) else 0.13
 
 FILE_PATH_WITH_SPACE_AND_SPACIAL_CHARS = "test 'test.out!"
 STRING_CASES = [

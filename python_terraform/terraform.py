@@ -52,7 +52,7 @@ class Terraform:
         var_file: Optional[str] = None,
         terraform_bin_path: Optional[str] = None,
         is_env_vars_included: bool = True,
-        terraform_version: Optional[float] = 1.0
+        terraform_version: Optional[float] = 0.13
     ):
         """
         :param working_dir: the folder of the working folder, if not given,
