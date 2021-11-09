@@ -366,7 +366,8 @@ class Terraform:
         if capture_output is False:
             raise ValueError("capture_output is required for this method")
 
-        ret, out, _ = self.output_cmd(*args, **kwargs)
+        global_opts = self._generate_default_general_options(False)
+        ret, out, _ = self.output_cmd(global_opts, *args, **kwargs)
 
         if ret:
             return None
@@ -402,7 +403,8 @@ class Terraform:
         :param workspace: the desired workspace.
         :return: status
         """
-        return self.cmd("workspace", "select", workspace, *args, **kwargs)
+        global_opts = self._generate_default_general_options(False)
+        return self.cmd(global_opts, "workspace", "select", workspace, *args, **kwargs)
 
     def create_workspace(self, workspace, *args, **kwargs) -> CommandOutput:
         """Create workspace
@@ -410,7 +412,8 @@ class Terraform:
         :param workspace: the desired workspace.
         :return: status
         """
-        return self.cmd("workspace", "new", workspace, *args, **kwargs)
+        global_opts = self._generate_default_general_options(False)
+        return self.cmd(global_opts, "workspace", "new", workspace, *args, **kwargs)
 
     def delete_workspace(self, workspace, *args, **kwargs) -> CommandOutput:
         """Delete workspace
@@ -418,14 +421,16 @@ class Terraform:
         :param workspace: the desired workspace.
         :return: status
         """
-        return self.cmd("workspace", "delete", workspace, *args, **kwargs)
+        global_opts = self._generate_default_general_options(False)
+        return self.cmd(global_opts, "workspace", "delete", workspace, *args, **kwargs)
 
     def show_workspace(self, **kwargs) -> CommandOutput:
         """Show workspace, this command does not need the [DIR] part
 
         :return: workspace
         """
-        return self.cmd("workspace", "show", **kwargs)
+        global_opts = self._generate_default_general_options(False)
+        return self.cmd(global_opts, "workspace", "show", **kwargs)
 
     def _generate_default_args(self, dir_or_plan: Optional[str]) -> Sequence[str]:
         if (self.terraform_version < 1.0 and dir_or_plan):
@@ -507,7 +512,8 @@ class Terraform:
             if cmd_name.endswith("_cmd"):
                 cmd_name = cmd_name[:-4]
             logger.debug("called with %r and %r", args, kwargs)
-            return self.cmd(cmd_name, *args, **kwargs)
+            global_opts = self._generate_default_general_options(False)
+            return self.cmd(global_opts, cmd_name, *args, **kwargs)
 
         return wrapper
 
