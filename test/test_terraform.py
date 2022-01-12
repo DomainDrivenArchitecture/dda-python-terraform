@@ -22,17 +22,17 @@ version = 1.0 if (os.environ.get("TFVER") and os.environ.get("TFVER").startswith
 FILE_PATH_WITH_SPACE_AND_SPACIAL_CHARS = "test 'test.out!"
 STRING_CASES = [
     [
-        lambda x: x.generate_cmd_string("apply", "the_folder", no_color=IsFlagged),
+        lambda x: x.generate_cmd_string({}, "apply", "the_folder", no_color=IsFlagged),
         "terraform apply -no-color the_folder",
     ],
     [
-        lambda x: x.generate_cmd_string(
+        lambda x: x.generate_cmd_string({}, 
             "push", "path", vcs=True, token="token", atlas_address="url"
         ),
         "terraform push -vcs=true -token=token -atlas-address=url path",
     ],
     [
-        lambda x: x.generate_cmd_string(
+        lambda x: x.generate_cmd_string({}, 
             "refresh", "path", token="token"
         ),
         "terraform refresh -token=token path",
