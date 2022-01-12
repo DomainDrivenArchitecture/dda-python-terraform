@@ -307,7 +307,7 @@ class TestTerraform:
             (
                 "var_to_output",
                 {"test_map_var": {"c": "c", "d": "d"}},
-                "var_to_output/test_map_var.json",
+                "test_map_var.json",
                 # Values are overriden
                 'test_map_output=tomap({"e"="e""f"="f"})',
                 {},
@@ -322,6 +322,7 @@ class TestTerraform:
         ],
     )
     def test_apply(self, folder, variables, var_files, expected_output, options):
+        var_files_version = folder + var_files if version < 1.0 else var_files
         tf = Terraform(
             working_dir=current_path, variables=variables, var_file=var_files, terraform_version=version
         )
