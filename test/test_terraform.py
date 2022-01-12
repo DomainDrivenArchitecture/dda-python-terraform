@@ -157,7 +157,6 @@ CMD_CASES_1_x = [
             lambda x: x.cmd(
                 {"chdir": "var_to_output"},
                 "plan",
-                "",
                 out=FILE_PATH_WITH_SPACE_AND_SPACIAL_CHARS,
                 raise_on_error=False,
             ),
