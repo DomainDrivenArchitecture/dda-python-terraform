@@ -289,19 +289,19 @@ class TestTerraform:
     @pytest.mark.parametrize(
         ("folder", "variables", "var_files", "expected_output", "options"),
         [
-            ("var_to_output", {"test_var": "test"}, None, "test_output=test", {}),
+            ("var_to_output", {"test_var": "test"}, None, 'test_output="test"', {}),
             (
                 "var_to_output",
                 {"test_list_var": ["c", "d"]},
                 None,
-                'test_list_output=["c","d",]',
+                'test_list_output=tolist(["c","d",])',
                 {},
             ),
             (
                 "var_to_output",
                 {"test_map_var": {"c": "c", "d": "d"}},
                 None,
-                'test_map_output={"c"="c""d"="d"}',
+                'test_map_output=tomap({"c"="c""d"="d"})',
                 {},
             ),
             (
@@ -309,7 +309,7 @@ class TestTerraform:
                 {"test_map_var": {"c": "c", "d": "d"}},
                 "var_to_output/test_map_var.json",
                 # Values are overriden
-                'test_map_output={"e"="e""f"="f"}',
+                'test_map_output=tomap({"e"="e""f"="f"})',
                 {},
             ),
             (
@@ -323,7 +323,7 @@ class TestTerraform:
     )
     def test_apply(self, folder, variables, var_files, expected_output, options):
         tf = Terraform(
-            working_dir=current_path, variables=variables, var_file=var_files
+            working_dir=current_path, variables=variables, var_file=var_files, terraform_version=version
         )
         tf.init(folder)
         ret, out, err = tf.apply(folder, **options)
