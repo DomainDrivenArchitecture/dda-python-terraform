@@ -155,7 +155,10 @@ class Terraform:
         """
         global_opts = self._generate_default_general_options(dir_or_plan)
         default = kwargs.copy()
-        default["force"] = force
+        # force is no longer a flag in version >= 1.0
+        if self.terraform_version < 1.0:
+            default["force"] = force
+        default["auto-approve"] = True
         options = self._generate_default_options(default)
         args = self._generate_default_args(dir_or_plan)
         return self.cmd(global_opts, "destroy", *args, **options)
