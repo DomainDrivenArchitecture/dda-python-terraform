@@ -125,13 +125,12 @@ CMD_CASES_1_x = [
             lambda x: x.cmd(
                 {"chdir": "var_to_output"},
                 "plan",
-                "",
                 no_color=IsFlagged,
                 var={"test_var": "test"},
                 raise_on_error=False,
             ),
             # Expected output varies by terraform version
-            "Plan: 0 to add, 0 to change, 0 to destroy.",
+            "Changes to Outputs:",
             0,
             False,
             "",
