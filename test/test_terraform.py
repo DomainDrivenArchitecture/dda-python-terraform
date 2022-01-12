@@ -408,7 +408,7 @@ class TestTerraform:
             tf.init("var_to_output")
             tf.apply("var_to_output")
             params = tuple() if output_all else (required_output,)
-            result = tf.output(*params)
+            result = tf.output("var_to_output", *params)
         if output_all:
             assert result[required_output]["value"] == expected_value
         else:

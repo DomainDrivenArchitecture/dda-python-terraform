@@ -338,7 +338,7 @@ class Terraform:
         return ret_code, out, err
 
     def output(
-        self, *args, capture_output: bool = True, **kwargs
+        self, dir_or_plan: Optional[str] = None, *args, capture_output: bool = True, **kwargs
     ) -> Union[None, str, Dict[str, str], Dict[str, Dict[str, str]]]:
         """Refer https://www.terraform.io/docs/commands/output.html
 
@@ -366,8 +366,10 @@ class Terraform:
         if capture_output is False:
             raise ValueError("capture_output is required for this method")
 
-        global_opts = self._generate_default_general_options(False)
-        ret, out, _ = self.output_cmd(global_opts, *args, **kwargs)
+        global_opts = self._generate_default_general_options(dir_or_plan)
+        ret, out, _ = self.cmd(global_opts, "output", *args, **kwargs)
+
+        # ret, out, _ = self.output_cmd(global_opts, *args, **kwargs)
 
         if ret:
             return None
