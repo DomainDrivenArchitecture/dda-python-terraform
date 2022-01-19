@@ -187,7 +187,7 @@ APPLY_CASES_0_x = [
     [("var_to_output", {"test_var": "test"}, None, 'test_output=test', {}),
      ("var_to_output", {"test_list_var": ["c", "d"]}, None, 'test_list_output=["c","d",]', {},),
      ("var_to_output", {"test_map_var": {"c": "c", "d": "d"}}, None, 'test_map_output={"c"="c""d"="d"}', {},),
-     ("var_to_output", {"test_map_var": {"c": "c", "d": "d"}}, "test_map_var.json", 'test_map_output={"e"="e""f"="f"}', {},),
+     ("var_to_output", {"test_map_var": {"c": "c", "d": "d"}}, "var_to_output/test_map_var.json", 'test_map_output={"e"="e""f"="f"}', {},),
      ("var_to_output", {}, None, "\x1b[0m\x1b[1m\x1b[32mApplycomplete!", {"no_color": IsNotFlagged},), ]]
 
 APPLY_CASES_1_x = [
