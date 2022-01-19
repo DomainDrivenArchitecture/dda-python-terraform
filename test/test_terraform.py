@@ -184,7 +184,7 @@ CMD_CASES_1_x = [
 
 APPLY_CASES_0_x = [
     ["folder", "variables", "var_files", "expected_output", "options"],
-    [("var_to_output", {"test_var": "test"}, None, 'test_output="test"', {}),
+    [("var_to_output", {"test_var": "test"}, None, 'test_output=test', {}),
      ("var_to_output", {"test_list_var": ["c", "d"]}, None, 'test_list_output=["c","d",]', {},),
      ("var_to_output", {"test_map_var": {"c": "c", "d": "d"}}, None, 'test_map_output={"c"="c""d"="d"}', {},),
      ("var_to_output", {"test_map_var": {"c": "c", "d": "d"}}, "test_map_var.json", 'test_map_output={"e"="e""f"="f"}', {},),
@@ -304,6 +304,7 @@ class TestTerraform:
         assert expected_ret_code == ret
         assert expected_logs in caplog.text
 
+
     @pytest.mark.parametrize(*(APPLY_CASES_1_x if version >= 1.0 else APPLY_CASES_0_x))
     def test_apply(self, folder, variables, var_files, expected_output, options):
         tf = Terraform(
@@ -318,7 +319,6 @@ class TestTerraform:
     def test_apply_with_var_file(self, caplog: LogCaptureFixture):
         with caplog.at_level(logging.INFO):
             tf = Terraform(working_dir=current_path, terraform_version=version)
-
             folder = "var_to_output"
             tf.init(folder)
             tf.apply(
