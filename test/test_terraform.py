@@ -17,24 +17,26 @@ root_logger = logging.getLogger()
 
 current_path = os.path.dirname(os.path.realpath(__file__))
 
-version = 1.0 if (os.environ.get("TFVER") and os.environ.get("TFVER").startswith("1")) else 0.13
+version = 1.0 if (os.environ.get("TFVER") and os.environ.get(
+    "TFVER").startswith("1")) else 0.13
 
 FILE_PATH_WITH_SPACE_AND_SPACIAL_CHARS = "test 'test.out!"
 STRING_CASES = [
     [
-        lambda x: x.generate_cmd_string({}, "apply", "the_folder", no_color=IsFlagged),
+        lambda x: x.generate_cmd_string(
+            {}, "apply", "the_folder", no_color=IsFlagged),
         "terraform apply -no-color the_folder",
     ],
     [
-        lambda x: x.generate_cmd_string({}, 
-            "push", "path", vcs=True, token="token", atlas_address="url"
-        ),
+        lambda x: x.generate_cmd_string({},
+                                        "push", "path", vcs=True, token="token", atlas_address="url"
+                                        ),
         "terraform push -vcs=true -token=token -atlas-address=url path",
     ],
     [
-        lambda x: x.generate_cmd_string({}, 
-            "refresh", "path", token="token"
-        ),
+        lambda x: x.generate_cmd_string({},
+                                        "refresh", "path", token="token"
+                                        ),
         "terraform refresh -token=token path",
     ],
 ]
@@ -180,6 +182,22 @@ CMD_CASES_1_x = [
     ],
 ]
 
+APPLY_CASES_0_x = [
+    ["folder", "variables", "var_files", "expected_output", "options"],
+    [("var_to_output", {"test_var": "test"}, None, 'test_output="test"', {}),
+     ("var_to_output", {"test_list_var": ["c", "d"]}, None, 'test_list_output=["c","d",]', {},),
+     ("var_to_output", {"test_map_var": {"c": "c", "d": "d"}}, None, 'test_map_output={"c"="c""d"="d"}', {},),
+     ("var_to_output", {"test_map_var": {"c": "c", "d": "d"}}, "test_map_var.json", 'test_map_output={"e"="e""f"="f"}', {},),
+     ("var_to_output", {}, None, "\x1b[0m\x1b[1m\x1b[32mApplycomplete!", {"no_color": IsNotFlagged},), ]]
+
+APPLY_CASES_1_x = [
+    ["folder", "variables", "var_files", "expected_output", "options"],
+    [("var_to_output", {"test_var": "test"}, None, 'test_output="test"', {}),
+     ("var_to_output", {"test_list_var": ["c", "d"]}, None, 'test_list_output=tolist(["c","d",])', {},),
+     ("var_to_output", {"test_map_var": {"c": "c", "d": "d"}}, None, 'test_map_output=tomap({"c"="c""d"="d"})', {},),
+     ("var_to_output", {"test_map_var": {"c": "c", "d": "d"}}, "test_map_var.json", 'test_map_output=tomap({"e"="e""f"="f"})', {},),
+     ("var_to_output", {}, None, "\x1b[0m\x1b[1m\x1b[32mApplycomplete!", {"no_color": IsNotFlagged},), ]]
+
 
 @pytest.fixture(scope="function")
 def fmt_test_file(request):
@@ -233,7 +251,8 @@ def workspace_setup_teardown():
 class TestTerraform:
     def teardown_method(self, _) -> None:
         """Teardown any state that was previously setup with a setup_method call."""
-        exclude = ["test_tfstate_file", "test_tfstate_file2", "test_tfstate_file3"]
+        exclude = ["test_tfstate_file",
+                   "test_tfstate_file2", "test_tfstate_file3"]
 
         def purge(dir: str, pattern: str) -> None:
             for root, dirnames, filenames in os.walk(dir):
@@ -269,7 +288,7 @@ class TestTerraform:
         expected_logs: str,
         caplog: LogCaptureFixture,
         folder: str,
-    ):    
+    ):
         with caplog.at_level(logging.INFO):
             tf = Terraform(working_dir=current_path, terraform_version=version)
             tf.init(folder)
@@ -285,44 +304,8 @@ class TestTerraform:
         assert expected_ret_code == ret
         assert expected_logs in caplog.text
 
-
-    @pytest.mark.parametrize(
-        ("folder", "variables", "var_files", "expected_output", "options"),
-        [
-            ("var_to_output", {"test_var": "test"}, None, 'test_output="test"', {}),
-            (
-                "var_to_output",
-                {"test_list_var": ["c", "d"]},
-                None,
-                'test_list_output=tolist(["c","d",])',
-                {},
-            ),
-            (
-                "var_to_output",
-                {"test_map_var": {"c": "c", "d": "d"}},
-                None,
-                'test_map_output=tomap({"c"="c""d"="d"})',
-                {},
-            ),
-            (
-                "var_to_output",
-                {"test_map_var": {"c": "c", "d": "d"}},
-                "test_map_var.json",
-                # Values are overriden
-                'test_map_output=tomap({"e"="e""f"="f"})',
-                {},
-            ),
-            (
-                "var_to_output",
-                {},
-                None,
-                "\x1b[0m\x1b[1m\x1b[32mApplycomplete!",
-                {"no_color": IsNotFlagged},
-            ),
-        ],
-    )
+    @pytest.mark.parametrize(*(APPLY_CASES_1_x if version >= 1.0 else APPLY_CASES_0_x))
     def test_apply(self, folder, variables, var_files, expected_output, options):
-        var_files_version = folder + var_files if version < 1.0 else var_files
         tf = Terraform(
             working_dir=current_path, variables=variables, var_file=var_files, terraform_version=version
         )
@@ -340,7 +323,8 @@ class TestTerraform:
             tf.init(folder)
             tf.apply(
                 folder,
-                var_file=os.path.join(current_path, "tfvar_files", "test.tfvars"),
+                var_file=os.path.join(
+                    current_path, "tfvar_files", "test.tfvars"),
             )
         for log in caplog.messages:
             if log.startswith("Command: terraform apply"):
@@ -361,7 +345,8 @@ class TestTerraform:
 
     def test_state_data(self):
         cwd = os.path.join(current_path, "test_tfstate_file")
-        tf = Terraform(working_dir=cwd, state="tfstate.test", terraform_version=version)
+        tf = Terraform(working_dir=cwd, state="tfstate.test",
+                       terraform_version=version)
         tf.read_state_file()
         assert tf.tfstate.modules[0]["path"] == ["root"]
 
@@ -379,14 +364,16 @@ class TestTerraform:
 
     def test_pre_load_state_data(self):
         cwd = os.path.join(current_path, "test_tfstate_file")
-        tf = Terraform(working_dir=cwd, state="tfstate.test", terraform_version=version)
+        tf = Terraform(working_dir=cwd, state="tfstate.test",
+                       terraform_version=version)
         assert tf.tfstate.modules[0]["path"] == ["root"]
 
     @pytest.mark.parametrize(
         ("folder", "variables"), [("var_to_output", {"test_var": "test"})]
     )
     def test_override_default(self, folder, variables):
-        tf = Terraform(working_dir=current_path, variables=variables, terraform_version=version)
+        tf = Terraform(working_dir=current_path,
+                       variables=variables, terraform_version=version)
         tf.init(folder)
         ret, out, err = tf.apply(
             folder, var={"test_var": "test2"}, no_color=IsNotFlagged,
@@ -415,7 +402,8 @@ class TestTerraform:
         assert expected_value in caplog.messages[-1]
 
     def test_destroy(self):
-        tf = Terraform(working_dir=current_path, variables={"test_var": "test"}, terraform_version=version)
+        tf = Terraform(working_dir=current_path, variables={
+                       "test_var": "test"}, terraform_version=version)
         tf.init("var_to_output")
         ret, out, err = tf.destroy("var_to_output")
         assert ret == 0
@@ -425,7 +413,8 @@ class TestTerraform:
         ("plan", "variables", "expected_ret"), [("vars_require_input", {}, 1)]
     )
     def test_plan(self, plan, variables, expected_ret):
-        tf = Terraform(working_dir=current_path, variables=variables, terraform_version=version)
+        tf = Terraform(working_dir=current_path,
+                       variables=variables, terraform_version=version)
         tf.init(plan)
         with pytest.raises(TerraformCommandError) as e:
             tf.plan(plan)
@@ -434,7 +423,8 @@ class TestTerraform:
         )
 
     def test_fmt(self, fmt_test_file):
-        tf = Terraform(working_dir=current_path, variables={"test_var": "test"}, terraform_version=version)
+        tf = Terraform(working_dir=current_path, variables={
+                       "test_var": "test"}, terraform_version=version)
         ret, out, err = tf.fmt(diff=True)
         assert ret == 0
 
@@ -493,6 +483,7 @@ class TestTerraform:
             in caplog.messages
         )
     """
+
     def test_show_workspace(self, workspace_setup_teardown):
         workspace_name = "test"
         with workspace_setup_teardown(workspace_name) as tf:
