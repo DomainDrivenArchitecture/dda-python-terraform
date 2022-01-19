@@ -393,7 +393,7 @@ class TestTerraform:
         )
         out = out.replace("\n", "")
         assert "\x1b[0m\x1b[1m\x1b[32mApply" in out
-        out = tf.output("test_output")
+        out = tf.output(folder, "test_output")
         assert "test2" in out
 
     @pytest.mark.parametrize("output_all", [True, False])
