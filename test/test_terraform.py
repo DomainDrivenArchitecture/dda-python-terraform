@@ -419,7 +419,7 @@ class TestTerraform:
         with pytest.raises(TerraformCommandError) as e:
             tf.plan(plan)
         assert (
-            "\nError: Unsupported argument\n\n" in e.value.err
+            "\nError:" in e.value.err
         )
 
     def test_fmt(self, fmt_test_file):
