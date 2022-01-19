@@ -430,8 +430,7 @@ class TestTerraform:
         with pytest.raises(TerraformCommandError) as e:
             tf.plan(plan)
         assert (
-            e.value.err
-            == """\nError: Missing required argument\n\nThe argument "region" is required, but was not set.\n\n"""
+            "\nError: Unsupported argument\n\n" in e.value.err
         )
 
     def test_fmt(self, fmt_test_file):
