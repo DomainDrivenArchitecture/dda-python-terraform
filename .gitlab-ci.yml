@@ -9,6 +9,7 @@ before_script:
 stages:
   - lint
   - test
+  - build
   - upload
 
 flake8:
@@ -77,9 +78,9 @@ test-1.1.3:
   - PATH=$PATH:$PWD/tf_bin 
   - pytest -v
 
-release:
-  stage: upload
+build:
+  stage: build
   rules:
-    - if: '$CI_COMMIT_TAG != null'
+    - if: '$CI_COMMIT_TAG == null'
   script:
     - python setup.py sdist bdist_wheel
