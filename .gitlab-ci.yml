@@ -91,7 +91,7 @@ build:
 pypi:
   stage: upload
   rules:
-    - if: '$CI_COMMIT_TAG != null'
+    - if: '$CI_COMMIT_TAG =~ /^release.-*$/'
   script:
     - twine upload dist/*
 
@@ -99,7 +99,7 @@ gitlab:
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   stage: upload
   rules:
-    - if: '$CI_COMMIT_TAG != null'
+    - if: '$CI_COMMIT_TAG =~ /^release.-*$/'
   artifacts:
     paths:
     - release/*
