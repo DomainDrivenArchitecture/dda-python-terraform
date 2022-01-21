@@ -8,5 +8,5 @@ git push --follow-tags
 increase version no in build.py
 git commit -am "version bump"
 git push
-pip3 install --upgrade --user ddadevops
+pip3 install --upgrade --user dda-python-terraform
 ```
