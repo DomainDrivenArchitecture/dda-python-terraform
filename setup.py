@@ -28,7 +28,7 @@ setup(
     author_email="beelit94@gmail.com",
     description=short_description,
     long_description=long_description,
-    packages=["python_terraform"],
+    packages=["dda_python_terraform"],
     package_data={},
     platforms="any",
     install_requires=dependencies,
