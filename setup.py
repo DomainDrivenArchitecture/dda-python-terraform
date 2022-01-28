@@ -21,7 +21,7 @@ except IOError:
 
 setup(
     name=module_name,
-    version="1.0.3",
+    version="1.0.4-dev",
     url="https://github.com/DomainDrivenArchitecture/python-terraform",
     license="MIT",
     author="Freddy Tan",
