@@ -1,3 +1,3 @@
 Please see README at github_
 
-.. _github: https://github.com/beelit94/python-terraform/blob/master/README.md
+.. _github: https://github.com/DomainDrivenArchitecture/python-terraform/blob/develop/README.md
