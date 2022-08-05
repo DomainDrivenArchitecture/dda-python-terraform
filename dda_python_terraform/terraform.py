@@ -437,6 +437,26 @@ class Terraform:
         global_opts = self._generate_default_general_options(False)
         return self.cmd(global_opts, "workspace", "show", **kwargs)
 
+    def list_workspace(self) -> List[str]:
+        """List of workspaces
+
+        :return: workspaces
+        :example:
+            >>> tf = Terraform()
+            >>> tf.list_workspace()
+            ['default', 'test']
+        """
+        global_opts = self._generate_default_general_options(False)
+        return list(
+            filter(
+                lambda workspace: len(workspace) > 0,
+                map(
+                    lambda workspace: workspace.strip('*').strip(),                    
+                    (self.cmd(global_opts, "workspace", "list")[1] or '').split()
+                )
+            )
+        )
+
     def _generate_default_args(self, dir_or_plan: Optional[str]) -> Sequence[str]:
         if (self.terraform_version < 1.0 and dir_or_plan):
             return [dir_or_plan]
@@ -467,7 +487,7 @@ class Terraform:
         """
         """
         result = []
-        
+
         for option, value in kwargs.items():
             if "_" in option:
                 option = option.replace("_", "-")
@@ -507,10 +527,10 @@ class Terraform:
 
             result += [f"-{option}={value}"]
         return result
-    
+
     def __exit__(self, exc_type, exc_value, traceback) -> None:
         self.temp_var_files.clean_up()
-    
+
     def __getattr__(self, item: str) -> Callable:
         def wrapper(*args, **kwargs):
             cmd_name = str(item)
@@ -522,7 +542,7 @@ class Terraform:
 
         return wrapper
 
-    
+
 
 
 class VariableFiles:

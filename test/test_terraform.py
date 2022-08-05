@@ -529,3 +529,9 @@ class TestTerraform:
             in caplog.messages
         )
     """
+
+    def test_list_workspace(self):
+        tf = Terraform(working_dir=current_path)
+        workspaces = tf.list_workspace()
+        assert len(workspaces) > 0
+        assert 'default' in workspaces
