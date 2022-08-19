@@ -1,13 +1,7 @@
 ## Introduction
 
-python-terraform is a python module provide a wrapper of `terraform` command line tool.
+dda-python-terraform is a python module provide a wrapper of `terraform` command line tool.
 `terraform` is a tool made by Hashicorp, please refer to https://terraform.io/
-
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-
-### Status
-[![Build Status](https://travis-ci.org/aubustou/python-terraform.svg?branch=develop)](https://travis-ci.org/aubustou/python-terraform)
 
 ## Installation
     pip install python-terraform
@@ -15,7 +9,7 @@ python-terraform is a python module provide a wrapper of `terraform` command lin
 ## Usage
 #### For any terraform command
 
-    from python_terraform import *
+    from dda_python_terraform import *
     t = Terraform()
     return_code, stdout, stderr = t.<cmd_name>(*arguments, **options)
 
@@ -23,13 +17,13 @@ python-terraform is a python module provide a wrapper of `terraform` command lin
 to be able to call the method, you could call cmd_name by adding `_cmd` after command name, for example,
 `import` here could be called by
 
-    from python_terraform import *
+    from dda_python_terraform import *
     t = Terraform()
     return_code, stdout, stderr = t.import_cmd(*arguments, **options)
 
 or just call cmd method directly
 
-    from python_terraform import *
+    from dda_python_terraform import *
     t = Terraform()
     return_code, stdout, stderr = t.cmd(<cmd_name>, *arguments, **options)
 
@@ -82,7 +76,7 @@ simply pass the string to arguments of the method, for example,
 By default, stdout and stderr are captured and returned. This causes the application to appear to hang. To print terraform output in real time, provide the `capture_output` option with any value other than `None`. This will cause the output of terraform to be printed to the terminal in real time. The value of `stdout` and `stderr` below will be `None`.
 
 
-    from python_terraform import Terraform
+    from dda_python_terraform import Terraform
     t = Terraform()
     return_code, stdout, stderr = t.<cmd_name>(capture_output=False)
 
@@ -96,19 +90,19 @@ In shell:
 
 In python-terraform:
 
-    from python_terraform import *
+    from dda_python_terraform import *
     tf = Terraform(working_dir='/home/test')
     tf.apply(no_color=IsFlagged, refresh=False, var={'a':'b', 'c':'d'})
 
 or
 
-    from python_terraform import *
+    from dda_python_terraform import *
     tf = Terraform()
     tf.apply('/home/test', no_color=IsFlagged, refresh=False, var={'a':'b', 'c':'d'})
 
 or
 
-    from python_terraform import *
+    from dda_python_terraform import *
     tf = Terraform(working_dir='/home/test', variables={'a':'b', 'c':'d'})
     tf.apply(no_color=IsFlagged, refresh=False)
 
@@ -120,7 +114,7 @@ In shell:
 
 In python-terraform:
 
-    from python_terraform import *
+    from dda_python_terraform import *
     tf = terraform(working_dir='/home/test')
     tf.fmt(diff=True)
 
