@@ -5,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type, Union
+from packaging import version
 
 from dda_python_terraform.tfstate import Tfstate
 
@@ -52,7 +53,7 @@ class Terraform:
         var_file: Optional[str] = None,
         terraform_bin_path: Optional[str] = None,
         is_env_vars_included: bool = True,
-        terraform_version: Optional[float] = 0.13
+        terraform_semantic_version: Optional[str] = "0.13.0"
     ):
         """
         :param working_dir: the folder of the working folder, if not given,
@@ -69,6 +70,7 @@ class Terraform:
         :param terraform_bin_path: binary path of terraform
         :type is_env_vars_included: bool
         :param is_env_vars_included: included env variables when calling terraform cmd
+        :param terrform_semantic_version encodes major.minor.patch version of terraform. Defaults to 0.13.0
         """
         self.is_env_vars_included = is_env_vars_included
         self.working_dir = working_dir
@@ -79,7 +81,7 @@ class Terraform:
         self.terraform_bin_path = (
             terraform_bin_path if terraform_bin_path else "terraform"
         )
-        self.terraform_version = terraform_version
+        self.terraform_semantic_version = terraform_semantic_version
         self.var_file = var_file
         self.temp_var_files = VariableFiles()
 
@@ -156,7 +158,7 @@ class Terraform:
         global_opts = self._generate_default_general_options(dir_or_plan)
         default = kwargs.copy()
         # force is no longer a flag in version >= 1.0
-        if self.terraform_version < 1.0:
+        if version.parse(self.terraform_semantic_version) < version.parse("1.0.0"):
             default["force"] = force
         default["auto-approve"] = True
         options = self._generate_default_options(default)
@@ -458,13 +460,13 @@ class Terraform:
         )
 
     def _generate_default_args(self, dir_or_plan: Optional[str]) -> Sequence[str]:
-        if (self.terraform_version < 1.0 and dir_or_plan):
+        if (version.parse(self.terraform_semantic_version) < version.parse("1.0.0") and dir_or_plan):
             return [dir_or_plan]
         else:
             return []
 
     def _generate_default_general_options(self, dir_or_plan: Optional[str]) -> Dict[str, Any]:
-        if (self.terraform_version >= 1.0 and dir_or_plan):
+        if (version.parse(self.terraform_semantic_version) >= version.parse("1.0.0") and dir_or_plan):
             return {"chdir": dir_or_plan}
         else:
             return {}
@@ -541,7 +543,6 @@ class Terraform:
             return self.cmd(global_opts, cmd_name, *args, **kwargs)
 
         return wrapper
-
 
 
 
