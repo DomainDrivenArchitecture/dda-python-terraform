@@ -6,7 +6,7 @@ import sys
 import tempfile
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type, Union
 
-from python_terraform.tfstate import Tfstate
+from dda_python_terraform.tfstate import Tfstate
 
 logger = logging.getLogger(__name__)
 
