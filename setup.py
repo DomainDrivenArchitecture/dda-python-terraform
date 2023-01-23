@@ -22,7 +22,7 @@ except IOError:
 setup(
     name=module_name,
     version="2.1.0-dev",
-    url="https://github.com/DomainDrivenArchitecture/python-terraform",
+    url="https://gitlab.com/domaindrivenarchitecture/dda-python-terraform",
     license="MIT",
     author="Freddy Tan",
     author_email="beelit94@gmail.com",
