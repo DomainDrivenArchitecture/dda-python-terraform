@@ -1,3 +1,8 @@
+# dda-python-terraform
+[![pipeline status](https://gitlab.com/domaindrivenarchitecture/dda-python-terraform/badges/master/pipeline.svg)](https://gitlab.com/domaindrivenarchitecture/dda-python-terraform/-/commits/main)
+
+[<img src="https://domaindrivenarchitecture.org/img/delta-chat.svg" width=20 alt="DeltaChat"> chat over e-mail](mailto:buero@meissa-gmbh.de?subject=community-chat) | [<img src="https://meissa-gmbh.de/img/community/Mastodon_Logotype.svg" width=20 alt="team@social.meissa-gmbh.de"> team@social.meissa-gmbh.de](https://social.meissa-gmbh.de/@team) | [Website & Blog](https://domaindrivenarchitecture.org)
+
 ## Introduction
 
 dda-python-terraform is a python module provide a wrapper of `terraform` command line tool.
@@ -134,3 +139,11 @@ This make api caller don't have a general rule to follow but to do
 a exhaustive method implementation which I don't prefer to.
 Therefore I end-up with using `IsFlagged` or `IsNotFlagged` as value of option
 like `-no-color` and `True/False` value reserved for option like `refresh=true`
+
+## Development & mirrors
+Development happens at: https://repo.prod.meissa.de/meissa/dda-python-terraform
+
+Mirrors are: 
+* https://codeberg.org/meissa/dda-python-terraform (issues and PR)
+* https://gitlab.com/domaindrivenarchitecture/dda-python-terraform (CI)
+* https://github.com/DomainDrivenArchitecture/dda-python-terraform

@@ -22,10 +22,10 @@ except IOError:
 setup(
     name=module_name,
     version="2.1.2-dev",
-    url="https://gitlab.com/domaindrivenarchitecture/dda-python-terraform",
+    url="https://repo.prod.meissa.de/meissa/dda-python-terraform",
     license="MIT",
-    author="Freddy Tan",
-    author_email="beelit94@gmail.com",
+    author="Freddy Tan, meissa team",
+    author_email="buero@meissa.de",
     description=short_description,
     long_description=long_description,
     packages=["dda_python_terraform"],
