@@ -453,7 +453,7 @@ class Terraform:
             filter(
                 lambda workspace: len(workspace) > 0,
                 map(
-                    lambda workspace: workspace.strip('*').strip(),                    
+                    lambda workspace: workspace.strip('*').strip(),
                     (self.cmd(global_opts, "workspace", "list")[1] or '').split()
                 )
             )
@@ -543,7 +543,6 @@ class Terraform:
             return self.cmd(global_opts, cmd_name, *args, **kwargs)
 
         return wrapper
-
 
 
 class VariableFiles:
