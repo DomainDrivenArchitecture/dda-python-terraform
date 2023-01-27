@@ -12,6 +12,9 @@ dist/
 build/
 /pytestdebug.log
 .pytestdebug.log
+/pytest_cache
+.lsp
+
 
 # virtualenv
 .virtualenv/
@@ -33,3 +36,4 @@ tmp.txt
 /.tox/
 env/
 Icon
+.clj-kondo
