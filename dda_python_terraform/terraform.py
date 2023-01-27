@@ -1,3 +1,4 @@
+"""Module providing wrapper for terraform."""
 import json
 import logging
 import os
@@ -30,8 +31,9 @@ CommandOutput = Tuple[Optional[int], Optional[str], Optional[str]]
 
 
 class TerraformCommandError(subprocess.CalledProcessError):
+    """Class representing a terraform error"""
     def __init__(self, ret_code: int, cmd: str, out: Optional[str], err: Optional[str]):
-        super(TerraformCommandError, self).__init__(ret_code, cmd)
+        super().__init__(ret_code, cmd)
         self.out = out
         self.err = err
         logger.error("Error with command %s. Reason: %s", self.cmd, self.err)
@@ -76,7 +78,7 @@ class Terraform:
         self.working_dir = working_dir
         self.state = state
         self.targets = [] if targets is None else targets
-        self.variables = dict() if variables is None else variables
+        self.variables = {} if variables is None else variables
         self.parallelism = parallelism
         self.terraform_bin_path = (
             terraform_bin_path if terraform_bin_path else "terraform"
@@ -313,15 +315,15 @@ class Terraform:
         if self.is_env_vars_included:
             environ_vars = os.environ.copy()
 
-        p = subprocess.Popen(
+        proc = subprocess.Popen(
             cmds, stdout=stdout, stderr=stderr, cwd=working_folder, env=environ_vars
         )
 
         if not synchronous:
             return None, None, None
 
-        out, err = p.communicate()
-        ret_code = p.returncode
+        out, err = proc.communicate()
+        ret_code = proc.returncode
         logger.info("output: %s", out)
 
         if ret_code == 0:
@@ -486,8 +488,6 @@ class Terraform:
         }
 
     def _generate_cmd_options(self, **kwargs) -> List[str]:
-        """
-        """
         result = []
 
         for option, value in kwargs.items():
@@ -501,13 +501,12 @@ class Terraform:
 
             if isinstance(value, dict):
                 if "backend-config" in option:
-                    for bk, bv in value.items():
-                        result += [f"-backend-config={bk}={bv}"]
+                    for backend_key, backend_value in value.items():
+                        result += [f"-backend-config={backend_key}={backend_value}"]
                     continue
-
                 # since map type sent in string won't work, create temp var file for
                 # variables, and clean it up later
-                elif option == "var":
+                if option == "var":
                     # We do not create empty var-files if there is no var passed.
                     # An empty var-file would result in an error: An argument or block definition is required here
                     if value:
@@ -546,10 +545,12 @@ class Terraform:
 
 
 class VariableFiles:
+    """Class representing a terraform var files"""
     def __init__(self):
         self.files = []
 
     def create(self, variables: Dict[str, str]) -> str:
+        """create var file in temp"""
         with tempfile.NamedTemporaryFile(
             "w+t", suffix=".tfvars.json", delete=False
         ) as temp:
@@ -562,7 +563,8 @@ class VariableFiles:
         return file_name
 
     def clean_up(self):
-        for f in self.files:
-            os.unlink(f.name)
+        """cleanup the var file"""
+        for fle in self.files:
+            os.unlink(fle.name)
 
         self.files = []

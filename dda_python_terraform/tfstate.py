@@ -1,3 +1,4 @@
+"""Helper Module providing wrapper for terraform state."""
 import json
 import logging
 import os
@@ -7,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class Tfstate:
+    """Class representing a terraform state"""
     def __init__(self, data: Optional[Dict[str, str]] = None):
         self.tfstate_file: Optional[str] = None
         self.native_data = data
@@ -21,8 +23,8 @@ class Tfstate:
         """
         logger.debug("read data from %s", file_path)
         if os.path.exists(file_path):
-            with open(file_path) as f:
-                json_data = json.load(f)
+            with open(file_path, encoding="utf-8") as fle:
+                json_data = json.load(fle)
 
             tf_state = Tfstate(json_data)
             tf_state.tfstate_file = file_path

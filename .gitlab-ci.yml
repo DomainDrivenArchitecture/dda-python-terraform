@@ -30,7 +30,7 @@ pylint:
   stage: lint
   allow_failure: true
   script:
-  - pylint -d C0301 dda_python_terraform/*.py
+  - pylint -d C0112,C0115,C0301,R0913,R0903,R0902,R0914,R1705,R1732,W0622 dda_python_terraform/*.py
 
 
 test-0.13.7:

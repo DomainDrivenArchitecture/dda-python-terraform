@@ -1,3 +1,4 @@
+"""Module providing wrapper for terraform."""
 from .terraform import (
     IsFlagged,
     IsNotFlagged,
