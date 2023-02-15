@@ -1,7 +1,7 @@
 ## Release
 
 ```
-adjust version no in setup.py to release version no.
+adjust version number in setup.py to release version number.
 git commit -am "release"
 git tag -am "release" release-[release version no]
 git push --follow-tags
