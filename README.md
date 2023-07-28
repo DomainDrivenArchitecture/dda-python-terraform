@@ -144,6 +144,7 @@ like `-no-color` and `True/False` value reserved for option like `refresh=true`
 Development happens at: https://repo.prod.meissa.de/meissa/dda-python-terraform
 
 Mirrors are: 
-* https://codeberg.org/meissa/dda-python-terraform (issues and PR)
-* https://gitlab.com/domaindrivenarchitecture/dda-python-terraform (CI)
+* https://gitlab.com/domaindrivenarchitecture/dda-python-terraform (CI issues and PR)
 * https://github.com/DomainDrivenArchitecture/dda-python-terraform
+
+For more details about our repository model see: https://repo.prod.meissa.de/meissa/federate-your-repos
